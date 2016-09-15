@@ -1,0 +1,5 @@
+.idea
+vandor
+vendor/*
+*.log
+composer.lock

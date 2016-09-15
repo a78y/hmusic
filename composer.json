@@ -1,0 +1,15 @@
+{
+    "name": "h/music",
+    "version": "0.0.1",
+    "autoload": {
+        "psr-4": {
+        	"H\\": "src/",
+        	"Monolog\\": "vendor/monolog/monolog/src/Monolog/"
+        }
+    },
+    "require": {
+        "silex/silex": "~2.0",
+        "doctrine/orm": "*",
+        "monolog/monolog": "1.0.*"
+    }
+}
