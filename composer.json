@@ -3,8 +3,7 @@
     "version": "0.0.1",
     "autoload": {
         "psr-4": {
-        	"H\\": "src/",
-        	"Monolog\\": "vendor/monolog/monolog/src/Monolog/"
+        	"H\\": "src/"
         }
     },
     "require": {
