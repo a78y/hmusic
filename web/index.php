@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use H\Music\Application;
+use H\Music;
 
-$app = new Application();
+$configuration = new Music\ApplicationConfiguration();
+$configuration->load(dirname(__DIR__) . '/resources/config/global.yaml');
+
+$app = new Music\Application($configuration);
 $app->run();

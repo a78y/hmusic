@@ -1,14 +1,23 @@
 {
     "name": "h/music",
     "version": "0.0.1",
-    "autoload": {
-        "psr-4": {
-        	"H\\": "src/"
+    "homepage": "http://github.com/a78y",
+    "authors": [
+        {
+            "name": "Yudin Alexey",
+            "email": "yudin.alexey.m@gmail.com"
         }
-    },
+    ],
     "require": {
         "silex/silex": "~2.0",
+        "symfony/security": "2.3.*",
+        "symfony/yaml": "2.4.*@dev",
         "doctrine/orm": "*",
         "monolog/monolog": "1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
     }
 }

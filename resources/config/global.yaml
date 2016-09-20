@@ -1,0 +1,3 @@
+name: "hMusic"
+version: "1.0"
+extends: ["dev.yaml", "routes.yaml", "security.yaml"]
