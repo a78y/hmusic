@@ -6,16 +6,8 @@ use Silex;
 
 class Application extends Silex\Application
 {
-    private $configuration;
-    
-    public function __construct(ApplicationConfigurationInterface $configuration)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->configuration = $configuration->get();
-
-        if (isset($this->configuration['debug'])) {
-            $this->config['debug'] = (bool) $this->configuration['debug'];
-        }
     }
 }

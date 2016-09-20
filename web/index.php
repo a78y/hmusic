@@ -2,10 +2,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use H\Music;
+use H\Music\Application;
 
-$configuration = new Music\ApplicationConfiguration();
-$configuration->load(dirname(__DIR__) . '/resources/config/application.yaml');
-
-$app = new Music\Application($configuration);
+$app = new Application();
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+$app->register(new DF\Silex\Provider\YamlConfigServiceProvider(dirname(__DIR__) . '/resources/config/application.yaml'));
 $app->run();
