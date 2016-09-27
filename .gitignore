@@ -3,3 +3,5 @@ vandor
 vendor/*
 *.log
 composer.lock
+nbproject
+nbproject/*

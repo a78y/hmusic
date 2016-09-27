@@ -1,6 +1,0 @@
-name: "hMusic"
-version: "1.0"
-imports:
-  - { resource: dev.yaml }
-  - { resource: routes.yaml }
-  - { resource: security.yaml }

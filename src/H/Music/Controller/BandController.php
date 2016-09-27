@@ -7,11 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BandController
 {
-    public function find(Request $request, Application $app)
-    {
-        return 'List';
-    }
-
     public function get(Request $request, Application $app)
     {
         return 'GET';
@@ -30,5 +25,15 @@ class BandController
     public function delete(Request $request, Application $app)
     {
         return 'DELETE';
+    }
+
+    public function browse(Request $request, Application $app)
+    {
+        return 'List';
+    }
+
+    public function find(Request $request, Application $app)
+    {
+        return 'Find';
     }
 }

@@ -2,10 +2,9 @@
 
 namespace H\Music;
 
-use Silex\Provider\ServiceControllerServiceProvider;
-use DF\Silex\Provider\YamlConfigServiceProvider;
+use Silex;
+use DF;
 use H\Music\Provider;
-
 
 class Application extends Silex\Application
 {
@@ -13,9 +12,29 @@ class Application extends Silex\Application
     {
         parent::__construct();
 
-        $this->register(new ServiceControllerServiceProvider());
-		$this->register(new YamlConfigServiceProvider($workPath . '/resources/config/application.yaml'));
+        $this['workPath'] = $workPath;
 
+        $this->registerProviders();
+        $this->mountControllers();
+        $this->applySettings();
+    }
+
+    protected function registerProviders() 
+    {
+        $this->register(new DF\Silex\Provider\YamlConfigServiceProvider($this['workPath'] . '/resources/config/general.yaml'));
+        $this->register(new Silex\Provider\ServiceControllerServiceProvider());
+        $this->register(new Silex\Provider\DoctrineServiceProvider(), $this['config']['database']['default']);    	
+
+        $this->register(new Provider\BandServiceProvider());    	
+    }
+
+    protected function mountControllers() 
+    {
         $this->mount('/band', new Provider\BandControllerProvider());
+    }
+
+    protected function applySettings() 
+    {
+        $this['debug'] = $this['config']['debug'] ? $this['config']['debug'] : false;
     }
 }

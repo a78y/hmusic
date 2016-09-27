@@ -11,10 +11,10 @@
     "require": {
         "php": ">=5.5",
         "silex/silex": "dev-master",
-        "monolog/monolog": "1.x-dev",
+        "monolog/monolog": "dev-master",
+        "doctrine/orm": "dev-master",
         "symfony/security": "dev-master",
-	"df/silex-yaml-config-provider": "dev-master",
-	"dflydev/doctrine-orm-service-provider": "dev-master"
+        "df/silex-yaml-config-provider": "dev-master"
     },
     "autoload": {
         "psr-4": {

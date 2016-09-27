@@ -1,0 +1,15 @@
+name: "hMusic"
+version: "1.0"
+
+database:
+  default:
+    db.options: 
+      driver: pdo_mysql
+      host: localhost
+      dbname: hmusic
+      user: root
+      password: simple
+      charset: utf8
+
+imports:
+  - { resource: dev.yaml }
