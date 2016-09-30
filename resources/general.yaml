@@ -1,5 +1,5 @@
-name: "hMusic"
-version: "1.0"
+name: hMusic
+version: 1.0
 
 monolog:
   monolog.level: 300

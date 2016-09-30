@@ -6,13 +6,13 @@ use Silex;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\HttpCacheServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 use DF\Silex\Provider\YamlConfigServiceProvider;
-use H\Music\Provider\ControllerProvider;
+use H\Music\Provider\ControllerServiceProvider;
 
 class Application extends Silex\Application
 {
@@ -28,6 +28,7 @@ class Application extends Silex\Application
 
     protected function registerProviders()
     {
+        $this->register(new ServiceControllerServiceProvider());
         $this->register(new YamlConfigServiceProvider(sprintf('%s/resources/general.yaml', $this['workPath'])));
         $this->register(new HttpCacheServiceProvider(), array(
             'http_cache.cache_dir' => $this['workPath'] . '/resources/cache',
@@ -36,7 +37,7 @@ class Application extends Silex\Application
             'monolog.logfile' => sprintf('%s/resources/cache/%s.log', $this['workPath'], date('Y-m-d', time())),
         ));
         $this->register(new DoctrineServiceProvider(), $this['config']['database']['default']);
-        $this->register(new ControllerProvider($this['config']['controllers']));
+        $this->register(new ControllerServiceProvider($this['config']['controllers']));
     }
 
     protected function registerMiddleware()

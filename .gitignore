@@ -7,4 +7,3 @@ nbproject
 nbproject/*
 resources/logs/*.log
 resources/cache/*.
-resources/*.yaml
