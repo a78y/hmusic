@@ -1,9 +1,13 @@
 name: "hMusic"
 version: "1.0"
 
+monolog:
+  monolog.level: 300
+  monolog.name: application
+
 database:
   default:
-    db.options: 
+    db.options:
       driver: pdo_mysql
       host: localhost
       dbname: hmusic
@@ -12,4 +16,4 @@ database:
       charset: utf8
 
 imports:
-  - { resource: dev.yaml }
+  - { resource: routes.yaml }

@@ -1,0 +1,19 @@
+name: "hMusic"
+version: "1.0"
+
+monolog:
+  monolog.level: 300
+  monolog.name: application
+
+database:
+  default:
+    db.options:
+      driver: pdo_mysql
+      host:
+      dbname:
+      user:
+      password:
+      charset: utf8
+
+imports:
+  - { resource: routes.yaml }

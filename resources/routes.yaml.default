@@ -1,0 +1,31 @@
+controllers:
+  band.controller:
+    prefix: 'band'
+    class: 'H\\Music\\Controller\\BandController'
+    routes:
+      band.controller.create:
+        pattern: '/'
+        class: 'band.controller:create'
+        method: 'POST'
+      band.controller.update:
+        pattern: '/{id}'
+        class: 'band.controller:update'
+        method: 'PUT'
+        assert:
+          id: '\d+'
+      band.controller.delete:
+        pattern: '/{id}'
+        class: 'band.controller:delete'
+        method: 'DELETE'
+        assert:
+          id: '\d+'
+      band.controller.load:
+        pattern: '/{id}'
+        class: 'band.controller:load'
+        method: 'GET'
+        assert:
+          id: '\d+'
+      band.controller.find:
+        pattern: '/find'
+        class: 'band.controller:find'
+        method: 'POST'

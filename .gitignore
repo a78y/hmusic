@@ -5,3 +5,6 @@ vendor/*
 composer.lock
 nbproject
 nbproject/*
+resources/logs/*.log
+resources/cache/*.
+resources/*.yaml

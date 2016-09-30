@@ -3,8 +3,16 @@
 namespace H\Music;
 
 use Silex;
-use DF;
-use H\Music\Provider;
+use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\HttpCacheServiceProvider;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use DF\Silex\Provider\YamlConfigServiceProvider;
+use H\Music\Provider\ControllerProvider;
 
 class Application extends Silex\Application
 {
@@ -15,26 +23,70 @@ class Application extends Silex\Application
         $this['workPath'] = $workPath;
 
         $this->registerProviders();
-        $this->mountControllers();
-        $this->applySettings();
+        $this->registerMiddleware();
     }
 
-    protected function registerProviders() 
+    protected function registerProviders()
     {
-        $this->register(new DF\Silex\Provider\YamlConfigServiceProvider($this['workPath'] . '/resources/config/general.yaml'));
-        $this->register(new Silex\Provider\ServiceControllerServiceProvider());
-        $this->register(new Silex\Provider\DoctrineServiceProvider(), $this['config']['database']['default']);    	
-
-        $this->register(new Provider\BandServiceProvider());    	
+        $this->register(new YamlConfigServiceProvider(sprintf('%s/resources/general.yaml', $this['workPath'])));
+        $this->register(new HttpCacheServiceProvider(), array(
+            'http_cache.cache_dir' => $this['workPath'] . '/resources/cache',
+        ));
+        $this->register(new MonologServiceProvider(), $this['config']['monolog'] + array(
+            'monolog.logfile' => sprintf('%s/resources/cache/%s.log', $this['workPath'], date('Y-m-d', time())),
+        ));
+        $this->register(new DoctrineServiceProvider(), $this['config']['database']['default']);
+        $this->register(new ControllerProvider($this['config']['controllers']));
     }
 
-    protected function mountControllers() 
+    protected function registerMiddleware()
     {
-        $this->mount('/band', new Provider\BandControllerProvider());
+        $app = $this;
+
+        $app->before(function(Request $request)
+        {
+            if ($request->getMethod() === "OPTIONS")
+            {
+                $response = new Response();
+                $response->headers->set('Access-Control-Allow-Origin', '*');
+                $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+                $response->headers->set('Access-Control-Allow-Headers', 'Content-Type');
+                $response->setStatusCode(200);
+                return $response->send();
+            }
+        }, Application::EARLY_EVENT);
+
+        $app->after(function (Request $request, Response $response)
+        {
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+        });
+
+        $app->before(function (Request $request) {
+            if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
+            {
+                $json = json_decode($request->getContent(), true);
+                if (!is_array($json))
+                {
+                  $json = array();
+                }
+
+                $request->request->replace($json);
+            }
+        });
+
+        $app->error(function(\Exception $e, Request $request, $code) use ($app)
+        {
+            $app['monolog']->addError($e->getMessage());
+            $app['monolog']->addError($e->getTraceAsString());
+
+            return $app->json(array(
+                'message' => $e->getMessage(),
+                'statusCode' => $code,
+                'request' => $request,
+                'stackTrace' => $e->getTraceAsString(),
+            ), $code);
+        });
     }
 
-    protected function applySettings() 
-    {
-        $this['debug'] = $this['config']['debug'] ? $this['config']['debug'] : false;
-    }
 }
