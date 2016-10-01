@@ -29,12 +29,12 @@ class Application extends Silex\Application
     protected function registerProviders()
     {
         $this->register(new ServiceControllerServiceProvider());
-        $this->register(new YamlConfigServiceProvider(sprintf('%s/resources/general.yaml', $this['workPath'])));
+        $this->register(new YamlConfigServiceProvider(sprintf('%s/general.yaml', $this['workPath'])));
         $this->register(new HttpCacheServiceProvider(), array(
-            'http_cache.cache_dir' => $this['workPath'] . '/resources/cache',
+            'http_cache.cache_dir' => $this['workPath'] . '/cache',
         ));
         $this->register(new MonologServiceProvider(), $this['config']['monolog'] + array(
-            'monolog.logfile' => sprintf('%s/resources/cache/%s.log', $this['workPath'], date('Y-m-d', time())),
+            'monolog.logfile' => sprintf('%s/logs/%s.log', $this['workPath'], date('Y-m-d', time())),
         ));
         $this->register(new DoctrineServiceProvider(), $this['config']['database']['default']);
         $this->register(new ControllerServiceProvider($this['config']['controllers']));

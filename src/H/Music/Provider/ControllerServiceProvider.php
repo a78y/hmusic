@@ -16,21 +16,21 @@ class ControllerServiceProvider implements ServiceProviderInterface
 {
     protected $controllers;
 
-  /**
-   * Class controller.
-   *
-   * @param array  $controllers  Array of controllers
-   */
+    /**
+     * Class controller.
+     *
+     * @param array  $controllers  Array of controllers
+     */
     public function __construct(array $controllers)
     {
         $this->controllers = $controllers;
     }
 
-  /**
-   * Provider register.
-   *
-   * @param \Pimple\Container  $app  Application container
-   */
+    /**
+     * Provider register.
+     *
+     * @param \Pimple\Container  $app  Application container
+     */
     public function register(Container $app)
     {
         if ($app instanceof Application)
@@ -43,13 +43,13 @@ class ControllerServiceProvider implements ServiceProviderInterface
         }
     }
 
-  /**
-   * Mount controller and routes.
-   *
-   * @param \Silex\Application  $app         Application object
-   * @param string              $name        Controller name
-   * @param array               $controller  Controller data
-   */
+    /**
+     * Mount controller and routes.
+     *
+     * @param \Silex\Application  $app         Application object
+     * @param string              $name        Controller name
+     * @param array               $controller  Controller data
+     */
     protected function mountController(Application $app, $name, array $controller)
     {
         // create controller service
@@ -71,13 +71,13 @@ class ControllerServiceProvider implements ServiceProviderInterface
         $app->mount($controller['prefix'], $factory);
     }
 
-  /**
-   * Mount controller route.
-   *
-   * @param \Silex\ControllerCollection  $factory  Controller factory
-   * @param string                       $name     Route name
-   * @param array                        $route    Route data
-   */
+    /**
+     * Mount controller route.
+     *
+     * @param \Silex\ControllerCollection  $factory  Controller factory
+     * @param string                       $name     Route name
+     * @param array                        $route    Route data
+     */
     protected function mountControllerRoute(ControllerCollection $factory, $name, $route)
     {
         // extent route settings
