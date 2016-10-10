@@ -80,7 +80,7 @@ class ControllerServiceProvider implements ServiceProviderInterface
      */
     protected function mountControllerRoute(ControllerCollection $factory, $name, $route)
     {
-        // extent route settings
+        // extend route settings
         $route += array(
             'method' => 'GET',
             'assert' => array(),

@@ -1,4 +1,34 @@
 controllers:
+  account.controller:
+    prefix: account
+    class: H\Music\Controller\AccountController
+    routes:
+      baccountand.controller.create:
+        pattern: /
+        class: account.controller:create
+        method: POST
+      account.controller.update:
+        pattern: /{id}
+        class: account.controller:update
+        method: PUT
+        assert:
+          id: \d+
+      account.controller.delete:
+        pattern: /{id}
+        class: account.controller:delete
+        method: DELETE
+        assert:
+          id: \d+
+      account.controller.load:
+        pattern: /{id}
+        class: account.controller:load
+        method: GET
+        assert:
+          id: \d+
+      account.controller.find:
+        pattern: /find
+        class: account.controller:find
+        method: GET
   band.controller:
     prefix: band
     class: H\Music\Controller\BandController

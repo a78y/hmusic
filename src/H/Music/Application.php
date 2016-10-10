@@ -38,10 +38,10 @@ class Application extends Silex\Application
         $this['applicationPath'] = $this['workPath'] . '/web';
         $this['sourcesPath'] = $this['workPath'] . '/src';
         $this['resourcesPath'] = $this['workPath'] . '/resources';
-        $this['doctrinePath'] = $this['workPath'] . '/doctrine';
-        $this['cachePath'] = $this['workPath'] . '/cache';
-        $this['configFile'] = $this['workPath'] . '/resources/general.yaml';
-        $this['logFile'] = sprintf('%s/resources/logs/%s.log', $this['workPath'], date('Y-m-d', time()));
+        $this['doctrinePath'] = $this['resourcesPath'] . '/doctrine';
+        $this['cachePath'] = $this['resourcesPath'] . '/cache';
+        $this['configFile'] = $this['resourcesPath'] . '/general.yaml';
+        $this['logFile'] = sprintf('%s/logs/%s.log', $this['resourcesPath'], date('Y-m-d', time()));
     }
     
     protected function registerProviders()
