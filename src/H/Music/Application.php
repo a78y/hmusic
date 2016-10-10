@@ -3,41 +3,74 @@
 namespace H\Music;
 
 use Silex;
-use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\DoctrineServiceProvider;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use DF\Silex\Provider\YamlConfigServiceProvider;
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+
 use H\Music\Provider\ControllerServiceProvider;
 
 class Application extends Silex\Application
 {
-    public function __construct($workPath)
+    public function __construct($workPath = NULL)
     {
         parent::__construct();
 
-        $this['workPath'] = $workPath;
-
+        $this->registerConfiguration($workPath);
         $this->registerProviders();
         $this->registerMiddleware();
+        
+        if ($this['config']['env'] == 'dev') 
+        {
+            $app['debug'] = TRUE;
+        }
     }
 
+    protected function registerConfiguration($workPath) 
+    {
+        $this['workPath'] = $workPath ? $workPath : __DIR__ . '/../../..';
+        $this['applicationPath'] = $this['workPath'] . '/web';
+        $this['sourcesPath'] = $this['workPath'] . '/src';
+        $this['resourcesPath'] = $this['workPath'] . '/resources';
+        $this['doctrinePath'] = $this['workPath'] . '/doctrine';
+        $this['cachePath'] = $this['workPath'] . '/cache';
+        $this['configFile'] = $this['workPath'] . '/resources/general.yaml';
+        $this['logFile'] = sprintf('%s/resources/logs/%s.log', $this['workPath'], date('Y-m-d', time()));
+    }
+    
     protected function registerProviders()
     {
-        $this->register(new ServiceControllerServiceProvider());
-        $this->register(new YamlConfigServiceProvider(sprintf('%s/general.yaml', $this['workPath'])));
+        $this->register(new YamlConfigServiceProvider($this['configFile']));
         $this->register(new HttpCacheServiceProvider(), array(
-            'http_cache.cache_dir' => $this['workPath'] . '/cache',
+            'http_cache.cache_dir' => $this['cachePath'],
         ));
         $this->register(new MonologServiceProvider(), $this['config']['monolog'] + array(
-            'monolog.logfile' => sprintf('%s/logs/%s.log', $this['workPath'], date('Y-m-d', time())),
+            'monolog.logfile' => $this['logFile'],
         ));
-        $this->register(new DoctrineServiceProvider(), $this['config']['database']['default']);
+        
+        $this->register(new ServiceControllerServiceProvider());
         $this->register(new ControllerServiceProvider($this['config']['controllers']));
+
+        $this->register(new DoctrineServiceProvider, $this['config']['database']['default']);
+        $this->register(new DoctrineOrmServiceProvider, array(
+            'orm.proxies_dir' => $this['doctrinePath'] . '/proxies',
+            'orm.em.options' => array(
+                'mappings' => array(
+                    array(
+                        'type' => 'annotation',
+                        'alias' => 'Model',
+                        'namespace' => 'H\Music\Model\Entity',
+                        'path' => __DIR__ . '/Model/Entity',
+                    ),
+                ),
+            ),
+        ));
     }
 
     protected function registerMiddleware()
@@ -78,8 +111,7 @@ class Application extends Silex\Application
 
         $app->error(function(\Exception $e, Request $request, $code) use ($app)
         {
-            $app['monolog']->addError($e->getMessage());
-            $app['monolog']->addError($e->getTraceAsString());
+            $app['monolog']->error($e->getMessage());
 
             return $app->json(array(
                 'message' => $e->getMessage(),

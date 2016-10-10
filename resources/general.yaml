@@ -1,5 +1,6 @@
 name: hMusic
 version: 1.0
+env: dev
 
 monolog:
   monolog.level: 300

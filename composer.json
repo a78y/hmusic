@@ -14,7 +14,8 @@
         "monolog/monolog": "dev-master",
         "doctrine/orm": "dev-master",
         "symfony/security": "dev-master",
-        "df/silex-yaml-config-provider": "dev-master"
+        "df/silex-yaml-config-provider": "dev-master",
+        "dflydev/doctrine-orm-service-provider": "dev-master"
     },
     "autoload": {
         "psr-4": {
