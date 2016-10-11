@@ -8,18 +8,18 @@ use Silex\Application;
 use Silex\ControllerCollection;
 
 /**
- * Application controllers provider
+ * Controllers service provider.
  *
  * @author Yudin Alexey <alexeyvet@gmail.com>
  */
-class ControllerServiceProvider implements ServiceProviderInterface
+class ControllerMountServiceProvider implements ServiceProviderInterface
 {
     protected $controllers;
 
     /**
-     * Class controller.
+     * Class constructor.
      *
-     * @param array  $controllers  Array of controllers
+     * @param array  $controllers  Array of controllers data
      */
     public function __construct(array $controllers)
     {

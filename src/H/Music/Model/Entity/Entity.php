@@ -23,7 +23,7 @@ class Entity {
     /**
      * Get id
      *
-     * @return guid
+     * @return integer
      */
     public function getId()
     {
@@ -35,7 +35,7 @@ class Entity {
      *
      * @param \DateTime $createdAt
      *
-     * @return Account
+     * @return Entity
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -59,7 +59,7 @@ class Entity {
      *
      * @param \DateTime $updatedAt
      *
-     * @return Account
+     * @return Entity
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
@@ -83,7 +83,7 @@ class Entity {
     {
         $this->createdAt = $this->updatedAt = date('Y-m-d H:i:s');
     }
-       
+
     /** @PreUpdate */
     public function onPreUpdate()
     {

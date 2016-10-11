@@ -17,40 +17,31 @@ namespace H\Music\Model\Entity;
  *     }
  * )
  */
-class Account extends Entity {    
+class Account extends Entity
+{
     /** @Column(type="string", length=64, unique=true, options={ "default": "" }) */
     protected $name;
-    
+
     /** @Column(type="string", length=64, unique=true, options={ "default": "" }) */
     protected $email;
-    
+
     /** @Column(type="string", length=64, options={ "default": "" }) */
     protected $pass;
-    
+
     /** @Column(type="smallint", options={ "default": 1 }) */
     protected $status;
-    
+
     /** @Column(type="json_array") */
     protected $data;
-    
-    /** @Column(type="datetime", name="logined_at") */
-    protected $loginedAt;
 
-    /** @Column(type="datetime", name="accessed_at") */
-    protected $accessedAt;
+    /** @Column(type="datetime", name="auth_at") */
+    protected $authAt;
 
-    /**
-     * Get id
-     *
-     * @return guid
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    /** @Column(type="datetime", name="access_at") */
+    protected $accessAt;
 
     /**
-     * Set name
+     * Set account name.
      *
      * @param string $name
      *
@@ -64,7 +55,7 @@ class Account extends Entity {
     }
 
     /**
-     * Get name
+     * Get account name.
      *
      * @return string
      */
@@ -74,7 +65,7 @@ class Account extends Entity {
     }
 
     /**
-     * Set email
+     * Set account email.
      *
      * @param string $email
      *
@@ -88,7 +79,7 @@ class Account extends Entity {
     }
 
     /**
-     * Get email
+     * Get account email.
      *
      * @return string
      */
@@ -98,7 +89,7 @@ class Account extends Entity {
     }
 
     /**
-     * Set password (plain)
+     * Set account password
      *
      * @param string $password
      *
@@ -112,7 +103,7 @@ class Account extends Entity {
     }
 
     /**
-     * Set password (hash)
+     * Set account password hash
      *
      * @param string $pass
      *
@@ -126,7 +117,7 @@ class Account extends Entity {
     }
 
     /**
-     * Get password
+     * Get account password
      *
      * @return string
      */
@@ -136,7 +127,7 @@ class Account extends Entity {
     }
 
     /**
-     * Set status
+     * Set account status
      *
      * @param int $status
      *
@@ -150,7 +141,7 @@ class Account extends Entity {
     }
 
     /**
-     * Get status
+     * Get account status
      *
      * @return int
      */
@@ -160,7 +151,7 @@ class Account extends Entity {
     }
 
     /**
-     * Set data
+     * Set account data
      *
      * @param array $data
      *
@@ -174,7 +165,7 @@ class Account extends Entity {
     }
 
     /**
-     * Get data
+     * Get account data
      *
      * @return array
      */
@@ -184,50 +175,50 @@ class Account extends Entity {
     }
 
     /**
-     * Set loginedAt
+     * Set authentication date.
      *
-     * @param \DateTime $loginedAt
+     * @param \DateTime $authAt
      *
      * @return Account
      */
-    public function setLoginedAt(\DateTime $loginedAt)
+    public function setAuthAt(\DateTime $authAt)
     {
-        $this->loginedAt = $loginedAt;
+        $this->authAt = $authAt;
 
         return $this;
     }
 
     /**
-     * Get loginedAt
+     * Get authentication date.
      *
      * @return \DateTime
      */
-    public function getLoginedAt()
+    public function getAuthAt()
     {
-        return $this->loginedAt;
+        return $this->authAt;
     }
 
     /**
-     * Set accessedAt
+     * Set last access date.
      *
-     * @param \DateTime $accessedAt
+     * @param \DateTime $accessAt
      *
      * @return Account
      */
-    public function setAccessedAt(\DateTime $accessedAt)
+    public function setAccessAt(\DateTime $accessAt)
     {
-        $this->accessedAt = $accessedAt;
+        $this->accessAt = $accessAt;
 
         return $this;
     }
 
     /**
-     * Get accessedAt
+     * Get last access date.
      *
      * @return \DateTime
      */
-    public function getAccessedAt()
+    public function getAccessAt()
     {
-        return $this->accessedAt;
+        return $this->accessAt;
     }
 }

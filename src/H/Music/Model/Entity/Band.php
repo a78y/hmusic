@@ -15,7 +15,8 @@ namespace H\Music\Model\Entity;
  *     }
  * )
  */
-class Band extends Entity {    
+class Band extends Entity
+{
     /** @Column(type="string", length=128, options={ "default": "" }) */
     protected $name;
 
@@ -24,7 +25,7 @@ class Band extends Entity {
      *
      * @param string $name
      *
-     * @return Account
+     * @return Band
      */
     public function setName($name)
     {

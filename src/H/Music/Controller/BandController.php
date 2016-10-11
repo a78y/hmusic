@@ -24,12 +24,10 @@ class BandController
 
     public function load(Request $request, Application $app)
     {
-        $repository = $app['orm.em']->getRepository('Model:Account');
-
         return 'LOAD';
     }
 
-  public function find(Request $request, Application $app)
+    public function find(Request $request, Application $app)
     {
         return 'Find';
     }
