@@ -26,14 +26,14 @@ class Application extends Silex\Application
     /**
      * Class constructor.
      *
-     * @param string  $workPath  Application work path
+     * @param array $values Application work path
      */
-    public function __construct($workPath)
+    public function __construct(array $values = array())
     {
-        parent::__construct();
+        parent::__construct($values);
 
         // register configuration variables
-        $this->registerConfiguration($workPath);
+        $this->registerConfiguration();
         // register service providers
         $this->registerProviders();
         // define middleware
@@ -48,13 +48,10 @@ class Application extends Silex\Application
 
     /**
      * Initialize configuration for application.
-     *
-     * @param string  $workPath  Application work path
      */
-    protected function registerConfiguration($workPath)
+    protected function registerConfiguration()
     {
         // initialize environment paths
-        $this['workPath'] = $workPath;
         $this['applicationPath'] = $this['workPath'] . '/web';
         $this['sourcesPath'] = $this['workPath'] . '/src';
         $this['resourcesPath'] = $this['workPath'] . '/resources';
