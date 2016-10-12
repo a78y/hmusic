@@ -90,15 +90,15 @@ class Application extends Silex\Application
         $this->register(new ControllerMountServiceProvider($this['config']['controllers']));
 
         // register doctrine providers
-        $this->register(new DoctrineServiceProvider, $this['config']['database']['default']);
+        $this->register(new DoctrineServiceProvider, $this['config']['doctrine']['default']);
         $this->register(new DoctrineOrmServiceProvider, array(
             'orm.proxies_dir' => $this['doctrinePath'] . '/proxies',
             'orm.em.options' => array(
                 'mappings' => array(
                     array(
                         'type' => 'annotation',
-                        'alias' => 'Model',
-                        'namespace' => 'H\Music\Model\Entity',
+                        'alias' => $this['config']['doctrine']['alias'],
+                        'namespace' => $this['config']['doctrine']['namespace'],
                         'path' => __DIR__ . '/Model/Entity',
                     ),
                 ),

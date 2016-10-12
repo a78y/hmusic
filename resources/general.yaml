@@ -6,7 +6,9 @@ monolog:
   monolog.level: 300
   monolog.name: application
 
-database:
+doctrine:
+  alias: Model
+  namespace: H\Music\Model\Entity
   default:
     db.options:
       driver: pdo_mysql
