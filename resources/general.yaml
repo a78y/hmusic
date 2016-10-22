@@ -20,3 +20,4 @@ doctrine:
 
 imports:
   - { resource: routes.yaml }
+  - { resource: security.yaml }

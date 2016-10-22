@@ -5,6 +5,11 @@ namespace H\Music\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Accounts controller class.
+ *
+ * @author Yudin Alexey <alexeyvet@gmail.com>
+ */
 class AccountController
 {
     public function create(Request $request, Application $app)

@@ -61,10 +61,10 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
         // create controllers factory
         $factory = $app['controllers_factory'];
 
-        foreach ($controller['routes'] as $name => $route)
+        foreach ($controller['routes'] as $route_name => $route)
         {
             // create controller routes
-            $this->mountControllerRoute($factory, $name, $route);
+            $this->mountControllerRoute($factory, $name, $route_name, $route);
         }
 
         // mount controller routes
@@ -74,11 +74,12 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
     /**
      * Mount controller route.
      *
-     * @param \Silex\ControllerCollection  $factory  Controller factory
-     * @param string                       $name     Route name
-     * @param array                        $route    Route data
+     * @param \Silex\ControllerCollection  $factory          Controller factory
+     * @param string                       $controller_name  Controller name
+     * @param string                       $route_name       Route name
+     * @param array                        $route            Route data
      */
-    protected function mountControllerRoute(ControllerCollection $factory, $name, $route)
+    protected function mountControllerRoute(ControllerCollection $factory, $controller_name, $route_name, $route)
     {
         // extend route settings
         $route += array(
@@ -86,10 +87,20 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
             'assert' => array(),
         );
 
+        if (empty($route['name']))
+        {
+            $route_name = sprintf('%s.%s', $controller_name, $route_name);
+        }
+
+        if (empty($route['class']))
+        {
+            $route['class'] = sprintf('%s:%s', $controller_name, $route_name);
+        }
+
         // create controller route
         $controller = $factory->match($route['pattern'], $route['class']);
         $controller->method($route['method']);
-        $controller->bind($name);
+        $controller->bind($route_name);
 
         foreach ($route['assert'] as $arg => $pattern)
         {

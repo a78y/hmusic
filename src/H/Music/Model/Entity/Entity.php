@@ -5,8 +5,11 @@ namespace H\Music\Model\Entity;
 /**
  * @MappedSuperclass
  * @HasLifecycleCallbacks
+ *
+ * @author Yudin Alexey <alexeyvet@gmail.com>
  */
-class Entity {
+class Entity
+{
     /**
      * @Id
      * @Column(name="id", type="integer")

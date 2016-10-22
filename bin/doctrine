@@ -6,7 +6,9 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
-$app = new H\Music\Application(dirname(__DIR__));
+$app = new H\Music\Application(array(
+    'workPath' => dirname(__DIR__),
+));
 $app->boot();
 
 $console = new Application();

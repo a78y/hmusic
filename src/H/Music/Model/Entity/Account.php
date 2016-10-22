@@ -2,43 +2,65 @@
 
 namespace H\Music\Model\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+
 /**
  * @Entity(
  *     repositoryClass="H\Music\Model\Repository\AccountRepository"
  * )
  * @Table(
- *     name="account",
+ *     name="auth_account",
  *     indexes={
  *         @Index(name="iname", columns={"name"}),
  *         @Index(name="iemail", columns={"email"}),
- *         @Index(name="istatus", columns={"status"}),
+ *         @Index(name="ienabled", columns={"enabled"}),
  *         @Index(name="icreated_at", columns={"created_at"}),
  *         @Index(name="iupdated_at", columns={"updated_at"})
  *     }
  * )
+ *
+ * @author Yudin Alexey <alexeyvet@gmail.com>
  */
 class Account extends Entity
 {
-    /** @Column(type="string", length=64, unique=true, options={ "default": "" }) */
+    /** @Column(name="name", type="string", length=32, unique=true, options={ "default": "" }) */
     protected $name;
 
-    /** @Column(type="string", length=64, unique=true, options={ "default": "" }) */
+    /** @Column(name="email", type="string", length=32, unique=true, options={ "default": "" }) */
     protected $email;
 
-    /** @Column(type="string", length=64, options={ "default": "" }) */
-    protected $pass;
+    /** @Column(name="password", type="string", length=32, options={ "default": "" }) */
+    protected $password;
 
-    /** @Column(type="smallint", options={ "default": 1 }) */
-    protected $status;
+    /** @Column(name="enabled", type="smallint", options={ "default": 1 }) */
+    protected $enabled;
 
-    /** @Column(type="json_array") */
+    /** @Column(name="data", type="json_array") */
     protected $data;
 
-    /** @Column(type="datetime", name="auth_at") */
+    /** @Column(name="auth_at", type="datetime") */
     protected $authAt;
 
-    /** @Column(type="datetime", name="access_at") */
+    /** @Column(name="access_at", type="datetime") */
     protected $accessAt;
+
+    /**
+     * @ManyToMany(targetEntity="AccountRole")
+     * @JoinTable(
+     *   name="auth_account_role",
+     *   joinColumns={@JoinColumn(name="aid", referencedColumnName="id")},
+     *   inverseJoinColumns={@JoinColumn(name="rid", referencedColumnName="id")}
+     * )
+     */
+    protected $roles;
+
+    /**
+     * Entity constructor.
+     */
+    public function __construct() {
+        $this->roles = new ArrayCollection();
+    }
 
     /**
      * Set account name.
@@ -89,7 +111,7 @@ class Account extends Entity
     }
 
     /**
-     * Set account password
+     * Set account password.
      *
      * @param string $password
      *
@@ -97,57 +119,43 @@ class Account extends Entity
      */
     public function setPassword($password)
     {
-        $this->pass = md5($password);
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * Set account password hash
-     *
-     * @param string $pass
-     *
-     * @return Account
-     */
-    public function setPass($pass)
-    {
-        $this->pass = $pass;
-
-        return $this;
-    }
-
-    /**
-     * Get account password
+     * Get account password.
      *
      * @return string
      */
-    public function getPass()
+    public function getPassword()
     {
-        return $this->pass;
+        return $this->password;
     }
 
     /**
-     * Set account status
+     * Set account enabled status.
      *
-     * @param int $status
+     * @param int $enabled
      *
      * @return Account
      */
-    public function setStatus($status)
+    public function setEnabled($enabled)
     {
-        $this->status = $status;
+        $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get account status
+     * Get account enabled status.
      *
      * @return int
      */
-    public function getStatus()
+    public function getEnabled()
     {
-        return $this->status;
+        return $this->enabled;
     }
 
     /**
@@ -220,5 +228,52 @@ class Account extends Entity
     public function getAccessAt()
     {
         return $this->accessAt;
+    }
+
+    /**
+     * Set account roles.
+     *
+     * @param ArrayCollection $roles
+     *
+     * @return Account
+     */
+    public function setRoles(ArrayCollection $roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get account roles.
+     *
+     * @return ArrayCollection
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Get names of account roles.
+     *
+     * @return array
+     */
+    public function getRoleNames()
+    {
+        $roles = array();
+
+        if ($this->roles)
+        {
+            foreach ($this->roles as $role)
+            {
+                if ($role instanceof AccountRole)
+                {
+                    array_push($roles, $role->getName());
+                }
+            }
+        }
+
+        return $roles;
     }
 }

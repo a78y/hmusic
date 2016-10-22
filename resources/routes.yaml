@@ -1,61 +1,70 @@
 controllers:
+
+  api.controller:
+    prefix: api
+    class: H\Music\Controller\APIController
+    routes:
+      login:
+        pattern: /login
+        method: POST
+      logout:
+        pattern: /logout
+        method: POST
+      name:
+        pattern: /name
+        method: POST
+      version:
+        pattern: /version
+        method: POST
+
   account.controller:
-    prefix: account
+    prefix: api/account
     class: H\Music\Controller\AccountController
     routes:
-      baccountand.controller.create:
+      create:
         pattern: /
-        class: account.controller:create
         method: POST
-      account.controller.update:
+      update:
         pattern: /{id}
-        class: account.controller:update
         method: PUT
         assert:
           id: \d+
-      account.controller.delete:
+      delete:
         pattern: /{id}
-        class: account.controller:delete
         method: DELETE
         assert:
           id: \d+
-      account.controller.load:
+      load:
         pattern: /{id}
-        class: account.controller:load
         method: GET
         assert:
           id: \d+
-      account.controller.find:
+      find:
         pattern: /find
-        class: account.controller:find
         method: GET
+
   band.controller:
-    prefix: band
+    prefix: api/band
     class: H\Music\Controller\BandController
     routes:
-      band.controller.create:
+      create:
         pattern: /
-        class: band.controller:create
         method: POST
-      band.controller.update:
+      update:
         pattern: /{id}
-        class: band.controller:update
         method: PUT
         assert:
           id: \d+
-      band.controller.delete:
+      delete:
         pattern: /{id}
-        class: band.controller:delete
         method: DELETE
         assert:
           id: \d+
-      band.controller.load:
+      load:
         pattern: /{id}
-        class: band.controller:load
         method: GET
         assert:
           id: \d+
-      band.controller.find:
+      find:
         pattern: /find
-        class: band.controller:find
         method: GET

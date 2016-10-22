@@ -14,6 +14,8 @@ namespace H\Music\Model\Entity;
  *         @Index(name="iupdated_at", columns={"updated_at"})
  *     }
  * )
+ *
+ * @author Yudin Alexey <alexeyvet@gmail.com>
  */
 class Band extends Entity
 {

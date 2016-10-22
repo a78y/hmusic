@@ -7,13 +7,16 @@ use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use DF\Silex\Provider\YamlConfigServiceProvider;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Silex\Provider\SecurityJWTServiceProvider;
 
+use H\Music\Provider\AccountServiceProvider;
 use H\Music\Provider\ControllerMountServiceProvider;
 
 /**
@@ -38,12 +41,6 @@ class Application extends Silex\Application
         $this->registerProviders();
         // define middleware
         $this->registerMiddleware();
-
-        // settings for development environment
-        if ($this['config']['env'] == 'dev')
-        {
-            $app['debug'] = TRUE;
-        }
     }
 
     /**
@@ -72,14 +69,19 @@ class Application extends Silex\Application
     {
         // register configuration provider
         $this->register(new YamlConfigServiceProvider($this['configFile']));
+        if ($this['config']['env'] == 'dev') {
+            $app['debug'] = TRUE;
+        }
+
         // register cache provider
         $this->register(new HttpCacheServiceProvider(), array(
             'http_cache.cache_dir' => $this['cachePath'],
         ));
+
         // register logger provider
         $this->register(new MonologServiceProvider(), $this['config']['monolog'] + array(
-            'monolog.logfile' => $this['logFile'],
-        ));
+                'monolog.logfile' => $this['logFile'],
+            ));
 
         // register controller provider
         $this->register(new ServiceControllerServiceProvider());
@@ -101,6 +103,14 @@ class Application extends Silex\Application
                 ),
             ),
         ));
+
+        // register security providers
+        $this['security.jwt'] = $this['config']['security']['jwt'];
+        $this['security.firewalls'] = $this['config']['security']['firewalls'];
+
+        $this->register(new AccountServiceProvider());
+        $this->register(new SecurityServiceProvider());
+        $this->register(new SecurityJWTServiceProvider());
     }
 
     /**
@@ -111,10 +121,8 @@ class Application extends Silex\Application
         $app = $this;
 
         // allow cross-origin HTTP requests
-        $app->before(function(Request $request)
-        {
-            if ($request->getMethod() === "OPTIONS")
-            {
+        $app->before(function (Request $request) {
+            if ($request->getMethod() === "OPTIONS") {
                 $response = new Response();
                 $response->headers->set('Access-Control-Allow-Origin', '*');
                 $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -126,8 +134,7 @@ class Application extends Silex\Application
         }, Application::EARLY_EVENT);
 
         // allow cross-origin HTTP requests
-        $app->after(function (Request $request, Response $response)
-        {
+        $app->after(function (Request $request, Response $response) {
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
         });
@@ -135,8 +142,7 @@ class Application extends Silex\Application
         // prepare JSON requests
         $app->before(function (Request $request) {
             // check request content type
-            if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
-            {
+            if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
                 // decode request
                 $json = json_decode($request->getContent(), true);
                 // replace original request
@@ -145,8 +151,7 @@ class Application extends Silex\Application
         });
 
         // exceptions handler
-        $app->error(function(\Exception $e, Request $request, $code) use ($app)
-        {
+        $app->error(function (\Exception $e, Request $request, $code) use ($app) {
             // set exception message to log
             $app['monolog']->error($e->getMessage());
 
@@ -159,5 +164,4 @@ class Application extends Silex\Application
             ), $code);
         });
     }
-
 }
