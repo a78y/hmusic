@@ -10,8 +10,8 @@ use H\Music\Model\Entity\Account;
  *
  * @author Yudin Alexey <alexeyvet@gmail.com>
  */
-class AccountRepository extends EntityRepository {
-
+class AccountRepository extends EntityRepository
+{
     /**
      * Get account by name.
      *

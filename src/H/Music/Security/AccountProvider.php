@@ -7,8 +7,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-
-use H\Music\Model\Repository\AccountRepository;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * User account provider.
@@ -18,15 +17,18 @@ use H\Music\Model\Repository\AccountRepository;
 class AccountProvider implements UserProviderInterface
 {
     private $repository;
+    private $method;
 
     /**
      * Class constructor.
      *
-     * @param AccountRepository $repository
+     * @param EntityRepository $repository
+     * @param string           $method
      */
-    public function __construct(AccountRepository $repository)
+    public function __construct(EntityRepository $repository, $method)
     {
         $this->repository = $repository;
+        $this->method = $method;
     }
 
     /**
@@ -34,10 +36,9 @@ class AccountProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $account = $this->repository->getByName($username);
-
+        $account = call_user_func(array($this->repository, $this->method), $username);
         if (!$account) {
-            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
+            throw new \RuntimeException(sprintf('Account "%s" not found.', $username));
         }
 
         return new User($account->getName(), $account->getPassword(), $account->getRoleNames(), $account->getEnabled());

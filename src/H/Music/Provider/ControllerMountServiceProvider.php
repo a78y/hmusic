@@ -33,10 +33,8 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        if ($app instanceof Application)
-        {
-            foreach ($this->controllers as $name => $controller)
-            {
+        if ($app instanceof Application) {
+            foreach ($this->controllers as $name => $controller) {
                 // create controller service
                 $this->mountController($app, $name, $controller);
             }
@@ -53,16 +51,14 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
     protected function mountController(Application $app, $name, array $controller)
     {
         // create controller service
-        $app[$name] = function() use ($controller)
-        {
+        $app[$name] = function() use ($controller) {
             return new $controller['class']();
         };
 
         // create controllers factory
         $factory = $app['controllers_factory'];
 
-        foreach ($controller['routes'] as $route_name => $route)
-        {
+        foreach ($controller['routes'] as $route_name => $route) {
             // create controller routes
             $this->mountControllerRoute($factory, $name, $route_name, $route);
         }
@@ -87,23 +83,22 @@ class ControllerMountServiceProvider implements ServiceProviderInterface
             'assert' => array(),
         );
 
-        if (empty($route['name']))
-        {
-            $route_name = sprintf('%s.%s', $controller_name, $route_name);
+        $class_name = sprintf('%s:%s', $controller_name, $route_name);
+        if (!empty($route['class'])) {
+            $class_name = $route['class'];
         }
 
-        if (empty($route['class']))
-        {
-            $route['class'] = sprintf('%s:%s', $controller_name, $route_name);
+        $route_name = sprintf('%s.%s', $controller_name, $route_name);
+        if (!empty($route['name'])) {
+            $route_name = empty($route['name']);
         }
 
         // create controller route
-        $controller = $factory->match($route['pattern'], $route['class']);
+        $controller = $factory->match($route['pattern'], $class_name);
         $controller->method($route['method']);
         $controller->bind($route_name);
 
-        foreach ($route['assert'] as $arg => $pattern)
-        {
+        foreach ($route['assert'] as $arg => $pattern) {
             // add assert rule
             $controller->assert($arg, $pattern);
         }

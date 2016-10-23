@@ -1,6 +1,6 @@
 security:
   jwt:
-    secret_key: secret_key
+    secret_key: key
     life_time: 86400
     options:
       username_claim: sub
@@ -8,13 +8,14 @@ security:
       token_prefix: Bearer
   firewalls:
     login:
-      pattern: login|register|oauth
+      pattern: api/login
       anonymous: true
-    secured:
-        pattern: ^.*$
-        logout:
-          logout_path: /logout,
-        jwt:
-            use_forward: true
-            require_previous_session: false
-            stateless: true
+    api:
+      pattern: ^/api
+      logout:
+        logout_path: /api/logout
+        invalidate_session: true
+      jwt:
+        use_forward: false
+        require_previous_session: false
+        stateless: true

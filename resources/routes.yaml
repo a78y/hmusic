@@ -1,20 +1,17 @@
 controllers:
 
-  api.controller:
+  common.controller:
     prefix: api
-    class: H\Music\Controller\APIController
+    class: H\Music\Controller\CommonController
     routes:
+      info:
+        pattern: /info
+        method: GET
       login:
         pattern: /login
         method: POST
       logout:
         pattern: /logout
-        method: POST
-      name:
-        pattern: /name
-        method: POST
-      version:
-        pattern: /version
         method: POST
 
   account.controller:

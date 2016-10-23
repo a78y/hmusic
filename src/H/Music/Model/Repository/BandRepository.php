@@ -11,5 +11,6 @@ use H\Music\Model\Entity\Band;
  *
  * @author Yudin Alexey <alexeyvet@gmail.com>
  */
-class BandRepository extends EntityRepository {
+class BandRepository extends EntityRepository
+{
 }

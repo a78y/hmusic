@@ -263,12 +263,9 @@ class Account extends Entity
     {
         $roles = array();
 
-        if ($this->roles)
-        {
-            foreach ($this->roles as $role)
-            {
-                if ($role instanceof AccountRole)
-                {
+        if ($this->roles) {
+            foreach ($this->roles as $role) {
+                if ($role instanceof AccountRole) {
                     array_push($roles, $role->getName());
                 }
             }
